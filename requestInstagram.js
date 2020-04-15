@@ -21,6 +21,7 @@ export const instagramTokens = {
   client_secret: '433f38400b0cdf59e089c5e663632286',
   user_id: 0,
   redirect_uri: 'https://olayenca.github.io/iosCallbacks',
+  scheme: 'appName://',
 };
 
 export default async function requestInstagram(apiUri, scheme) {

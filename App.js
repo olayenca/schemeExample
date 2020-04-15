@@ -24,9 +24,8 @@ const App: () => React$Node = () => {
   const [yourId, setid] = useState('');
 
   const onClick = async () => {
-    const {client_id, redirect_uri} = instagramTokens;
+    const {client_id, redirect_uri, scheme} = instagramTokens;
     const apiUrl = `https://api.instagram.com/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=user_profile,user_media&response_type=code`;
-    const scheme = 'appName://';
 
     const result = await requestInstagram(apiUrl, scheme);
     const {username, id} = result;
