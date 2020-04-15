@@ -6,25 +6,45 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
   Text,
+  Button,
   StatusBar,
 } from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
+import requestInstagram, {instagramTokens} from './requestInstagram';
 
 const App: () => React$Node = () => {
+  const [yourUserName, setUserName] = useState('');
+  const [yourId, setid] = useState('');
+
+  const onClick = async () => {
+    const {client_id, redirect_uri, scheme} = instagramTokens;
+    const apiUrl = `https://api.instagram.com/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=user_profile,user_media&response_type=code`;
+
+    const result = await requestInstagram(apiUrl, scheme);
+    const {username, id} = result;
+
+    setUserName(username);
+    setid(id);
+  };
+
+  let content = !yourUserName?.length ? (
+    <Text style={styles.sectionDescription}>
+      {' '}
+      Click this link to login in to approve app
+    </Text>
+  ) : (
+    <Text style={styles.sectionDescription}>
+      {yourUserName}: {yourId}
+    </Text>
+  );
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -40,31 +60,13 @@ const App: () => React$Node = () => {
           )}
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
+              <Button
+                title="Login into Instagram"
+                onPress={onClick}
+                style={styles.sectionTitle}
+              />
+              {content}
             </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
           </View>
         </ScrollView>
       </SafeAreaView>

@@ -37,6 +37,17 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>appName</string>
+            </array>
+            <key>CFBundleURLName</key>
+            <string>com.blender.app</string>
+        </dict>
+    </array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>
