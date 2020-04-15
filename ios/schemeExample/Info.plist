@@ -42,7 +42,7 @@
         <dict>
             <key>CFBundleURLSchemes</key>
             <array>
-                <string>appName</string> << your chosen scheme name
+                <string>appName</string>
             </array>
             <key>CFBundleURLName</key>
             <string>com.blender.app</string>
