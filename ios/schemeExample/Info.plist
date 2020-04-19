@@ -45,7 +45,7 @@
                 <string>appName</string>
             </array>
             <key>CFBundleURLName</key>
-            <string>com.blender.app</string>
+            <string>com.appName.app</string>
         </dict>
     </array>
 	<key>NSLocationWhenInUseUsageDescription</key>
