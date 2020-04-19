@@ -1,5 +1,21 @@
 import inAppBrowser from 'react-native-inappbrowser-reborn';
 
+/*
+ * These tokens will not work as this app is unpublished.
+ * To generate your app tokens, create an app on
+ * https://developers.facebook.com
+ * and add yourself/instagram profile as a test user
+ */
+
+export const instagramTokens = {
+  access_token: '',
+  client_id: '550357975864603',
+  client_secret: '433f38400b0cdf59e089c5e663632286',
+  user_id: 0,
+  redirect_uri: 'https://olayenca.github.io/ios-app-webpage',
+  scheme: 'appName://',
+};
+
 const requests = async (type = 'GET', url = '', data = '') => {
   const response = await fetch(url, {
     method: type,
@@ -13,35 +29,30 @@ const requests = async (type = 'GET', url = '', data = '') => {
     referrerPolicy: 'no-referrer',
     body: data,
   });
+
   return await response.json();
-};
-export const instagramTokens = {
-  access_token: '',
-  client_id: '550357975864603',
-  client_secret: '433f38400b0cdf59e089c5e663632286',
-  user_id: 0,
-  redirect_uri: 'https://olayenca.github.io/iosCallbacks',
-  scheme: 'appName://',
 };
 
 export default async function requestInstagram(apiUri, scheme) {
   try {
     if (await inAppBrowser.isAvailable()) {
-      const result = await inAppBrowser.openAuth(apiUri);
       const {client_secret, client_id, redirect_uri} = instagramTokens;
-      let qr = {};
+      const result = await inAppBrowser.openAuth(apiUri);
+
+      let parameters = {};
+
       result.url
         .substring(scheme?.length + 1)
         .split('&')
-        .forEach(p => {
-          qr[p.split('=')[0]] = p.split('=')[1];
+        .forEach(item => {
+          parameters[item.split('=')[0]] = item.split('=')[1];
         });
 
       return requests(
         'POST',
         'https://api.instagram.com/oauth/access_token',
         `client_id=${client_id}&client_secret=${client_secret}&grant_type=authorization_code&redirect_uri=${redirect_uri}&code=${
-          qr.code
+          parameters.code
         }`,
       ).then(second => {
         if (second.access_token.length > 0) {

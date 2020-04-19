@@ -27,8 +27,7 @@ const App: () => React$Node = () => {
     const {client_id, redirect_uri, scheme} = instagramTokens;
     const apiUrl = `https://api.instagram.com/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=user_profile,user_media&response_type=code`;
 
-    const result = await requestInstagram(apiUrl, scheme);
-    const {username, id} = result;
+    const {username, id} = await requestInstagram(apiUrl, scheme);
 
     setUserName(username);
     setid(id);
@@ -37,7 +36,7 @@ const App: () => React$Node = () => {
   let content = !yourUserName?.length ? (
     <Text style={styles.sectionDescription}>
       {' '}
-      Click this link to login in to approve app
+      Click this link to login in and approve app
     </Text>
   ) : (
     <Text style={styles.sectionDescription}>
