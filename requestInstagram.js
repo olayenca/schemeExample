@@ -1,4 +1,5 @@
 import inAppBrowser from 'react-native-inappbrowser-reborn';
+import {URLSearchParams} from "whatwg-url";
 
 /*
  * These tokens will not work as this app is unpublished.
@@ -38,22 +39,12 @@ export default async function requestInstagram(apiUri, scheme) {
     if (await inAppBrowser.isAvailable()) {
       const {client_secret, client_id, redirect_uri} = instagramTokens;
       const result = await inAppBrowser.openAuth(apiUri);
-
-      let parameters = {};
-
-      result.url
-        .substring(scheme?.length + 1)
-        .split('&')
-        .forEach(item => {
-          parameters[item.split('=')[0]] = item.split('=')[1];
-        });
+      const code = new URLSearchParams(result?.url.split('?')[1]).get('code');
 
       return requests(
         'POST',
         'https://api.instagram.com/oauth/access_token',
-        `client_id=${client_id}&client_secret=${client_secret}&grant_type=authorization_code&redirect_uri=${redirect_uri}&code=${
-          parameters.code
-        }`,
+        `client_id=${client_id}&client_secret=${client_secret}&grant_type=authorization_code&redirect_uri=${redirect_uri}&code=${code}`,
       ).then(second => {
         if (second.access_token.length > 0) {
           const {user_id, access_token} = second;
